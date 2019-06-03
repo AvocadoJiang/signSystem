@@ -1,5 +1,6 @@
 package com.isl.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,12 @@ public class AcademyController {
 		Academy academy = new Academy(academyReq);
 		//学院信息自定义完整性进行校验
 		AcademyCheck(academy);
-		
+		String userId = (String) session.getAttribute("userId");
+		Date nowTime = new Date();
+		academy.setCreateTime(nowTime);
+		academy.setUpdateTime(nowTime);
+		academy.setCreateBy(userId);
+		academy.setUpdateBy(userId);
 		academyRepository.save(academy);
 		return new AcademyResp(academy);
 		
@@ -108,7 +114,10 @@ public class AcademyController {
 					if(StringUtils.isNotBlank(academy.getAcademyName())) {
 						entity.setAcademyName(academy.getAcademyName());
 					}
-					
+					String userId = (String) session.getAttribute("userId");
+					Date nowTime = new Date();
+					entity.setUpdateTime(nowTime);
+					entity.setUpdateBy(userId);
 					AcademyCheck(entity);
 					
 					academyRepository.save(entity);
